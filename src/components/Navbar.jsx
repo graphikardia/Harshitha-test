@@ -17,6 +17,7 @@ export default function Navbar() {
     { to: '/treks', label: 'Upcoming Treks' },
     { to: '/about', label: 'About' },
     { to: '/contact', label: 'Contact' },
+    { to: '/gallery', label: 'Gallery' },
   ]
 
   return (
@@ -40,9 +41,9 @@ export default function Navbar() {
         <div className="nav-actions">
           <a href="tel:+919876543210" className="nav-phone">
             <Phone size={18} />
-            <span>+91 98765 43210</span>
+            <span>Call Us</span>
           </a>
-          <Link to="/treks" className="btn btn-book">Book Now</Link>
+          <Link to="/booking" className="btn btn-book">Book now </Link>
           <button className="mobile-toggle" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

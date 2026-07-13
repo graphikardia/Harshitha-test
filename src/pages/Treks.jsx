@@ -1,7 +1,17 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MapPin, Clock, Mountain, Footprints, Star, ArrowRight, Calendar, Users } from 'lucide-react'
+import {
+  MapPin,
+  Clock,
+  Mountain,
+  Footprints,
+  Star,
+  ArrowRight,
+  Calendar,
+  Users,
+  Search
+} from 'lucide-react'
 
 const trekData = [
   { id: 1, name: 'Uttari Betta Sunrise Trek', location: 'Bangalore', category: 'Sunrise', duration: '1 Day', distance: '4 km', altitude: '2400 ft', difficulty: 'Easy', price: 699, image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800', rating: 4.8, highlights: ['Sunrise View', 'Jungle Trail', 'Ancient Temple'], slots: 25 },
@@ -19,6 +29,7 @@ const trekData = [
 ]
 
 export default function Treks() {
+  console.log("TREKS FILE LOADED");
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get('category')
   
@@ -27,17 +38,33 @@ export default function Treks() {
   
   const [activeDifficulty, setActiveDifficulty] = useState('All')
   const [activeDuration, setActiveDuration] = useState(categoryParam || 'All')
+  const [search,setSearch]=useState("")
 
   const getFilteredTreks = () => {
-    let filtered = trekData
-    if (activeDifficulty !== 'All') {
-      filtered = filtered.filter(t => t.difficulty === activeDifficulty)
-    }
-    if (activeDuration !== 'All') {
-      filtered = filtered.filter(t => t.duration === activeDuration)
-    }
-    return filtered
+  let filtered = trekData;
+
+  if (activeDifficulty !== "All") {
+    filtered = filtered.filter(
+      (t) => t.difficulty === activeDifficulty
+    );
   }
+
+  if (activeDuration !== "All") {
+    filtered = filtered.filter(
+      (t) => t.duration === activeDuration
+    );
+  }
+
+  if (search.trim() !== "") {
+    filtered = filtered.filter(
+      (t) =>
+        t.name.toLowerCase().includes(search.toLowerCase()) ||
+        t.location.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+
+  return filtered;
+};
 
   const filteredTreks = getFilteredTreks()
 
@@ -107,6 +134,48 @@ export default function Treks() {
             </div>
           </div>
 
+<div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "35px"
+  }}
+>
+  <div
+    style={{
+      position: "relative",
+      width: "100%",
+      maxWidth: "500px"
+    }}
+  >
+    <Search
+      size={20}
+      style={{
+        position: "absolute",
+        top: "14px",
+        left: "15px",
+        color: "#888"
+      }}
+    />
+
+    <input
+      type="text"
+      placeholder="Search by trek name or location..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      style={{
+        width: "100%",
+        padding: "14px 18px 14px 45px",
+        borderRadius: "30px",
+        border: "1px solid #ddd",
+        fontSize: "16px",
+        outline: "none",
+        boxShadow: "0 5px 15px rgba(0,0,0,.08)"
+      }}
+    />
+  </div>
+</div>
+
           <div className="treks-grid">
             <AnimatePresence>
               {filteredTreks.map((trek, index) => (
@@ -119,8 +188,20 @@ export default function Treks() {
                   transition={{ delay: index * 0.05 }}
                   whileHover={{ y: -10 }}
                 >
-                  <div className="trek-image">
+                  <Link
+                    to="/trekdetails"
+                    state={{ trek }}
+                    className="trek-image"
+                  >
                     <img src={trek.image} alt={trek.name} />
+                    <div className="trek-image-content">
+                    <h3 className="trek-image-name">{trek.name}</h3>
+
+                  <div className="trek-image-location">
+                    <MapPin size={14} />
+                    <span>{trek.location}</span>
+                  </div>
+                  </div>
                     <div className="trek-badges">
                       <span className="difficulty-badge">{trek.difficulty}</span>
                       <span className="category-badge">{trek.category}</span>
@@ -132,21 +213,30 @@ export default function Treks() {
                     <div className="trek-slots">
                       <Users size={14} />
                       {trek.slots} slots left
+                      </div>
+                    <div className="trek-image-title">
+                      {trek.name}
                     </div>
-                  </div>
+                  </Link>
                   
-                  <div className="trek-info">
+                  <div
+                    className="trek-info"
+                    style={{
+                      background: "yellow",
+                      padding: "20px",
+                      display: "block"
+                    }}
+                  >
+                    
                     <div className="trek-location">
                       <MapPin size={14} />
                       {trek.location}
                     </div>
-                    <h3 className="trek-name">{trek.name}</h3>
+                    <h3 style={{ color: "red", fontSize: "24px" }}>
+                      {trek.name}
+                    </h3>
                     
-                    <div className="trek-highlights">
-                      {trek.highlights.map((h, i) => (
-                        <span key={i} className="highlight-tag">{h}</span>
-                      ))}
-                    </div>
+                   
 
                     <div className="trek-meta">
                       <div className="meta-item">
@@ -169,10 +259,20 @@ export default function Treks() {
                         <span className="price-value">₹{trek.price}</span>
                         <span className="price-unit">/person</span>
                       </div>
-                      <button className="btn-book-trek">
-                        Book Now
-                        <ArrowRight size={16} />
-                      </button>
+                      <Link
+                        to="/booking"
+                        className="btn-book-trek"
+                        style={{
+                          textDecoration: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px"
+                        }}
+                      >
+  Book Trek
+  <ArrowRight size={16} />
+</Link>
                     </div>
                   </div>
                 </motion.div>

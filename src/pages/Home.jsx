@@ -174,32 +174,51 @@ export default function Home() {
                 whileHover={{ y: -10 }}
               >
                 <div className="trek-card-image">
-                  <img src={trek.image} alt={trek.name} />
-                  <div className="trek-card-top-badges">
-                    <span className="status-badge open">Open</span>
-                    <span className="date-badge">{trek.dates}</span>
-                  </div>
-                  <div className="trek-card-badges">
-                    <span className={`difficulty-badge-large ${trek.difficulty.toLowerCase()}`}>{trek.difficulty} Expedition</span>
-                  </div>
-                  <div className="trek-card-overlay">
-                    <div className="trek-card-content">
-                      <div className="trek-card-info">
-                        <h3 className="trek-card-title">{trek.name}</h3>
-                        <p className="trek-card-desc">{trek.desc}</p>
-                      </div>
-                      <div className="trek-card-price">
-                        <span className="price-label">Starting from</span>
-                        <div className="price-main">
-                          <span className="currency">₹</span>
-                          <span className="price-amount">{trek.price.toLocaleString()}</span>
-                        </div>
-                        <button className="btn-secure-slot">Secure Slot</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+  <Link
+    to="/trekdetails"
+    state={{ trek }}
+  >
+    <img src={trek.image} alt={trek.name} />
+  </Link>
+
+  <div className="trek-card-top-badges">
+    <span className="status-badge open">Open</span>
+    <span className="date-badge">{trek.dates}</span>
+  </div>
+
+  <div className="trek-card-badges">
+    <span
+      className={`difficulty-badge-large ${trek.difficulty.toLowerCase()}`}
+    >
+      {trek.difficulty} Expedition
+    </span>
+  </div>
+
+  <div className="trek-card-overlay">
+    <div className="trek-card-content">
+      <div className="trek-card-info">
+        <h3 className="trek-card-title">{trek.name}</h3>
+        <p className="trek-card-desc">{trek.desc}</p>
+      </div>
+
+      <div className="trek-card-price">
+        <span className="price-label">Starting from</span>
+
+        <div className="price-main">
+          <span className="currency">₹</span>
+          <span className="price-amount">
+            {trek.price.toLocaleString()}
+          </span>
+        </div>
+
+        <Link to="/booking" className="btn-secure-slot">
+          Secure Slot
+        </Link>
+      </div>
+    </div>
+  </div>
+</div>
+</motion.div>
             ))}
           </div>
 

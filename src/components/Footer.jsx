@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; 2024 Namma Bengaluru Trekkers. All rights reserved.</p>
+          <p>&copy; 2026 Namma Bengaluru Trekkers. All rights reserved.</p>
           <p className="tagline">Explore. Trek. Discover.</p>
         </div>
       </div>
